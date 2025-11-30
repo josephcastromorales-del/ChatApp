@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <link rel="icon" href="assets/ChatGPT Image 25 nov 2025, 09_22_33 p.m..png">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ChatApp — Registro</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="center-wrap">
+    <div class="card auth-card">
+      <h2>Crear cuenta</h2>
+
+      <input id="reg-username" type="text" placeholder="Nombre de usuario" />
+      <input id="reg-email" type="email" placeholder="Correo" />
+      <input id="reg-password" type="password" placeholder="Contraseña (mín 8)" />
+      <input id="reg-passwordConfirm" type="password" placeholder="Repetir contraseña" />
+
+      <button id="register-btn">Registrarse</button>
+
+      <p class="small">¿Ya tienes cuenta? <a href="index.html">Iniciar sesión</a></p>
+
+      <div id="reg-msg" class="debug"></div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/pocketbase/dist/pocketbase.umd.js"></script>
+  <script src="app.js"></script>
+  <script src="auth.js"></script>
+  <script>
+    document.getElementById('register-btn').addEventListener('click', async ()=>{
+      const username = document.getElementById('reg-username').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const passwordConfirm = document.getElementById('reg-passwordConfirm').value;
+      document.getElementById('reg-msg').innerText = '';
+      const res = await registerUser(username,email,password,passwordConfirm);
+      if (res.ok) {
+        // Auto-login already handled in registerUser -> redirect to chat
+        location.href = 'chat.html';
+      } else {
+        document.getElementById('reg-msg').innerText = res.message || 'Error';
+      }
+    });
+  </script>
+</body>
+</html>

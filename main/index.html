@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="assets/ChatGPT Image 25 nov 2025, 09_22_33 p.m..png">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ChatApp — Login</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="center-wrap">
+    <div class="card auth-card">
+      <h2>Iniciar sesión</h2>
+
+      <input id="login-email" type="email" placeholder="Correo" />
+      <input id="login-password" type="password" placeholder="Contraseña" />
+
+      <button id="login-btn">Entrar</button>
+
+      <p class="small">¿No tienes cuenta? <a href="register.html">Regístrate</a></p>
+
+      <div id="login-msg" class="debug"></div>
+    </div>
+  </div>
+
+  <!-- PocketBase SDK CDN -->
+  <script src="https://unpkg.com/pocketbase/dist/pocketbase.umd.js"></script>
+  <script src="app.js"></script>
+  <script src="auth.js"></script>
+
+  <script>
+    // conectar botón
+    document.getElementById('login-btn').addEventListener('click', async () => {
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value.trim();
+      document.getElementById('login-msg').innerText = '';
+      const res = await signIn(email, password);
+      if (res.ok) location.href = 'chat.html';
+      else document.getElementById('login-msg').innerText = res.message || 'Error';
+    });
+  </script>
+  <script>
+      if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+      .then(() => console.log("SW registrado"));
+      }
+  </script>
+
+</body>
+</html>
+
