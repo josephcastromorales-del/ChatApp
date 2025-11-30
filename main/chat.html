@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+    <meta name="theme-color" content="#e2c044">
+    <link rel="icon" href="assets/Amarillo Con puntos.png">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ChatApp</title>
+  <link rel="stylesheet" href="chat.css">
+  <link rel="stylesheet" href="style.css"> <!-- opcional para utilidades -->
+</head>
+<body>
+  <div class="app-wrap">
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <div class="brand">ChatApp</div>
+      </div>
+
+      <div class="tabs">
+        <button id="tab-group" class="tab active">Grupo</button>
+        <button id="tab-private" class="tab">Muy Pronto</button> 
+      </div>
+
+      <div class="user-actions">
+          <span id="meName">—</span>
+      </div>
+
+      <div class="user-actions">
+        <button id="logoutBtn" title="Cerrar sesión">Salir</button>
+      </div>
+
+      <div class="users-list" id="usersList">
+        <!-- lista de usuarios se inyecta aquí -->
+      </div>
+    </aside>
+
+    <main class="chat-area">
+      <div class="chat-header" id="chatHeader">Chat grupal</div>
+
+      <div class="messages" id="messagesContainer"></div>
+
+      <div class="send-area">
+        <input id="messageInput" placeholder="Escribe un mensaje..." autocomplete="off" />
+        <button id="sendBtn">Enviar</button>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/pocketbase/dist/pocketbase.umd.js"></script>
+  <script src="app.js"></script>
+  <script src="chat.js"></script>
+</body>
+</html>
+
+
+
+
