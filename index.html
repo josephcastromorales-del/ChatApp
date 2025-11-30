@@ -30,21 +30,28 @@
   <script src="main/auth.js"></script>
 
   <script>
-    // conectar botón
+    // conectar botón de login
     document.getElementById('login-btn').addEventListener('click', async () => {
       const email = document.getElementById('login-email').value.trim();
       const password = document.getElementById('login-password').value.trim();
       document.getElementById('login-msg').innerText = '';
       const res = await signIn(email, password);
-      if (res.ok) location.href = 'chat.html';
-      else document.getElementById('login-msg').innerText = res.message || 'Error';
+
+      if (res.ok) {
+        // redirige a la ruta correcta dentro de main/
+        location.href = 'main/chat.html';
+      } else {
+        document.getElementById('login-msg').innerText = res.message || 'Error';
+      }
     });
   </script>
+
   <script>
-      if ('serviceWorker' in navigator) {
+    // service worker
+    if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
       .then(() => console.log("SW registrado"));
-      }
+    }
   </script>
 
 </body>
