@@ -26,23 +26,49 @@
   </div>
 
   <script src="https://unpkg.com/pocketbase/dist/pocketbase.umd.js"></script>
-  <script src="app.js"></script>
-  <script src="auth.js"></script>
+
   <script>
-    document.getElementById('register-btn').addEventListener('click', async ()=>{
+    const pb = new PocketBase("http://192.168.1.15:8090"); // tu PocketBase local
+
+    async function registerUser(username, email, password, passwordConfirm) {
+      if (password !== passwordConfirm) {
+        return { ok: false, message: "Las contraseñas no coinciden" };
+      }
+      if(password.length < 8){
+        return { ok: false, message: "La contraseña debe tener al menos 8 caracteres" };
+      }
+
+      try {
+        await pb.collection('users').create({
+          username,
+          email,
+          password,
+          passwordConfirm
+        });
+        return { ok: true };
+      } catch (err) {
+        console.error(err);
+        return { ok: false, message: err.message };
+      }
+    }
+
+    document.getElementById('register-btn').addEventListener('click', async () => {
       const username = document.getElementById('reg-username').value.trim();
       const email = document.getElementById('reg-email').value.trim();
       const password = document.getElementById('reg-password').value;
       const passwordConfirm = document.getElementById('reg-passwordConfirm').value;
       document.getElementById('reg-msg').innerText = '';
-      const res = await registerUser(username,email,password,passwordConfirm);
+
+      const res = await registerUser(username, email, password, passwordConfirm);
       if (res.ok) {
-        // Auto-login already handled in registerUser -> redirect to chat
-        location.href = 'chat.html';
+        alert("Cuenta creada correctamente");
+        window.location.href = 'index.html'; // volver al login
       } else {
-        document.getElementById('reg-msg').innerText = res.message || 'Error';
+        document.getElementById('reg-msg').innerText = res.message;
       }
     });
   </script>
 </body>
 </html>
+
+
