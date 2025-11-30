@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <link rel="icon" href="assets/Amarillo Con puntos.png">
+  <link rel="icon" href="main/assets/Amarillo Con puntos.png">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>ChatApp — Registro</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="main/styles.css">
 </head>
 <body>
   <div class="center-wrap">
@@ -19,48 +19,40 @@
 
       <button id="register-btn">Registrarse</button>
 
-      <p class="small">¿Ya tienes cuenta? <a href="index.html">Iniciar sesión</a></p>
+      <p class="small">¿Ya tienes cuenta? <a href="../index.html">Iniciar sesión</a></p>
 
       <div id="reg-msg" class="debug"></div>
     </div>
   </div>
 
+  <!-- PocketBase SDK CDN -->
   <script src="https://unpkg.com/pocketbase/dist/pocketbase.umd.js"></script>
+
   <script>
-    // Inicializa PocketBase (cambia la IP si es necesario)
-    const pb = new PocketBase("http://192.168.1.15:8090");
+    // Inicializa PocketBase (cambia esta URL a tu PocketBase online con HTTPS)
+    const pb = new PocketBase("https://mi-pocketbase-online.com");
 
     async function registerUser(username, email, password, passwordConfirm) {
       // Validaciones locales
-      if(!username || !email || !password || !passwordConfirm){
+      if (!username || !email || !password || !passwordConfirm) {
         return { ok: false, message: "Todos los campos son obligatorios" };
       }
-
-      if(password.length < 8){
+      if (password.length < 8) {
         return { ok: false, message: "La contraseña debe tener mínimo 8 caracteres" };
       }
-
-      if(password !== passwordConfirm){
+      if (password !== passwordConfirm) {
         return { ok: false, message: "Las contraseñas no coinciden" };
       }
 
       try {
-        // Verificar si el email ya existe
-        const exists = await pb.collection('users').getFullList({ filter: `email="${email}"` });
-        if(exists.length > 0){
-          return { ok: false, message: "Este correo ya está registrado" };
-        }
-
-        // Crear usuario
+        // Crear usuario en PocketBase
         await pb.collection('users').create({
           username,
           email,
           password,
           passwordConfirm
         });
-
         return { ok: true };
-
       } catch (err) {
         console.error(err);
         const msg = err.data ? JSON.stringify(err.data) : err.message;
@@ -68,7 +60,7 @@
       }
     }
 
-    // Conecta el botón de registro
+    // Conectar botón de registro
     document.getElementById('register-btn').addEventListener('click', async () => {
       const username = document.getElementById('reg-username').value.trim();
       const email = document.getElementById('reg-email').value.trim();
@@ -79,13 +71,19 @@
 
       const res = await registerUser(username, email, password, passwordConfirm);
 
-      if(res.ok){
+      if (res.ok) {
         alert("Cuenta creada correctamente");
-        window.location.href = 'index.html'; // vuelve al login
+        window.location.href = '../chat.html'; // Redirige al chat
       } else {
         document.getElementById('reg-msg').innerText = res.message;
       }
     });
+
+    // Registrar Service Worker (opcional, igual que en index.html)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+      .then(() => console.log("SW registrado"));
+    }
   </script>
 </body>
 </html>
